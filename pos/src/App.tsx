@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import './App.css'
+import { Button } from '@/components/ui/button'
+import '@/App.css'
 import { FrappeProvider } from 'frappe-react-sdk'
 function App() {
   const [count, setCount] = useState(0)
@@ -10,6 +11,7 @@ function App() {
 	  <FrappeProvider>
 		<div>
 	  <div>
+	  <Button variant="outline">Click me</Button>
 		<a href="https://vitejs.dev" target="_blank">
 		  <img src="/vite.svg" className="logo" alt="Vite logo" />
 		</a>
