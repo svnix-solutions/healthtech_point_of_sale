@@ -1,0 +1,15 @@
+{
+  "name": "healthtech_point_of_sale",
+  "version": "1.0.0",
+  "description": "Healthtech Point Of Sale",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd pos && yarn install",
+    "dev": "cd pos && yarn dev",
+    "build": "cd pos && yarn build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
