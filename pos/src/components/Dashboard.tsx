@@ -8,7 +8,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
-    navigate('/healthtech_point_of_sale/login');
+    navigate('/login');
   };
 
   return (

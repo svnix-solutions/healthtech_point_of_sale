@@ -29,7 +29,7 @@ const Login = () => {
       
       if (response) {
         localStorage.setItem('isAuthenticated', 'true');
-        navigate('/healthtech_point_of_sale/dashboard');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError('Invalid username or password. Please try again.');

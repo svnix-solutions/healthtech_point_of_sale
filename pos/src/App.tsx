@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 
 function Navigation() {
   const { currentUser, logout } = useAuth()
-  
+  console.log(currentUser);
   return (
     <nav>
       <ul className="flex space-x-4 p-4">
