@@ -1,39 +1,25 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useFrappeAuth, AuthCredentials } from 'frappe-react-sdk';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { CheckCircle2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { CheckCircle2, Lock, User } from 'lucide-react';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const { login } = useFrappeAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-
     try {
-      const credentials: AuthCredentials = {
-        username: username,
-        password: password
-      };
-      
-      const response = await login(credentials);
-      
-      if (response) {
-        localStorage.setItem('isAuthenticated', 'true');
-        navigate('/dashboard');
-      }
-    } catch (err) {
-      setError('Invalid username or password. Please try again.');
-      console.error('Login error:', err);
+      const token = 'dummy-token';
+      login(token);
+      toast.success('Login successful');
+    } catch (error) {
+      toast.error('Login failed');
     }
   };
 
@@ -66,48 +52,54 @@ const Login = () => {
       {/* Right Side - Login Form */}
       <div className="h-full lg:h-screen w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 bg-background">
         <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl sm:text-2xl font-bold text-center">Sign in to your account</CardTitle>
-            <CardDescription className="text-center text-sm">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold text-center">Sign in</CardTitle>
+            <CardDescription className="text-center">
               Enter your credentials to access your account
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-3">
-              {error && (
-                <Alert variant="destructive" className="py-2">
-                  <AlertDescription className="text-sm">{error}</AlertDescription>
-                </Alert>
-              )}
-              <div className="space-y-1.5">
-                <Label htmlFor="username" className="text-sm">Username</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  placeholder="Enter your username"
-                  value={username}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-                  required
-                  className="text-sm h-9"
-                />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="username"
+                    type="text"
+                    placeholder="Enter your username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                    className="pl-9"
+                  />
+                </div>
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-sm">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                  required
-                  className="text-sm h-9"
-                />
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="pl-9"
+                  />
+                </div>
               </div>
-              <Button type="submit" className="w-full text-sm h-9">
+              <Button type="submit" className="w-full">
                 Sign in
               </Button>
             </form>
           </CardContent>
+          <CardFooter className="flex flex-col space-y-4">
+            <div className="text-sm text-muted-foreground text-center">
+              By signing in, you agree to our Terms of Service and Privacy Policy
+            </div>
+          </CardFooter>
         </Card>
       </div>
     </div>

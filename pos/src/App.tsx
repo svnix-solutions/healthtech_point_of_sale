@@ -1,70 +1,67 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { FrappeProvider } from 'frappe-react-sdk'
 import '@/App.css'
-import Login from '@/components/Login'
-import Dashboard from '@/components/Dashboard'
-import ProtectedRoute from '@/components/ProtectedRoute'
-import { AuthProvider, useAuth } from '@/context/AuthContext'
+import Login from '@/pages/Login'
+import Dashboard from '@/pages/Dashboard'
+import Appointments from '@/pages/Appointments'
+import Orders from '@/pages/Orders'
+import Diagnostics from '@/pages/Diagnostics'
+import { AuthProvider, useAuth } from '@/contexts/AuthContext'
 import { Toaster } from "@/components/ui/sonner"
-import { Button } from '@/components/ui/button'
+import { Layout } from '@/components/Layout'
 
-function Navigation() {
-  const { currentUser, logout } = useAuth()
-  console.log(currentUser);
-  return (
-    <nav>
-      <ul className="flex space-x-4 p-4">
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/about">About</Link>
-        </li>
-        {currentUser ? (
-          <>
-            <li>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li>
-              <Button variant="outline" onClick={logout}>
-                Logout
-              </Button>
-            </li>
-          </>
-        ) : (
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-        )}
-      </ul>
-    </nav>
-  )
+const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useAuth()
+  return isAuthenticated ? <Layout>{children}</Layout> : <Navigate to="/login" />
 }
 
 function App() {
   return (
-    <div className="App">
-      <FrappeProvider>
+    <FrappeProvider>
+      <Router basename="/pos">
         <AuthProvider>
-          <Router basename="/pos">
-            <Navigation />
+          <div className="min-h-screen bg-background">
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route
                 path="/dashboard"
                 element={
-                  <ProtectedRoute>
+                  <PrivateRoute>
                     <Dashboard />
-                  </ProtectedRoute>
+                  </PrivateRoute>
                 }
               />
-              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route
+                path="/appointments"
+                element={
+                  <PrivateRoute>
+                    <Appointments />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <PrivateRoute>
+                    <Orders />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/diagnostics"
+                element={
+                  <PrivateRoute>
+                    <Diagnostics />
+                  </PrivateRoute>
+                }
+              />
+              <Route path="/" element={<Navigate to="/dashboard" />} />
             </Routes>
             <Toaster />
-          </Router>
+          </div>
         </AuthProvider>
-      </FrappeProvider>
-    </div>
+      </Router>
+    </FrappeProvider>
   )
 }
 
