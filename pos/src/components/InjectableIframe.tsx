@@ -44,8 +44,15 @@ const InjectableIframe = ({
       const iframe = iframeRef.current;
       if (iframe && iframe.contentWindow) {
         try {
-          // Add resize observer script to the iframe
-          const resizeScript = `
+          // Create a ResizeObserver to watch for content size changes
+          const colorScript = `
+            // Inject style element for background color
+            const style = document.createElement('style');
+            style.textContent = ':root {--navbar-height: 0;} .sticky-top { display: none; }';
+            document.head.appendChild(style);
+          `;
+
+          const resizeScript = `  
             // Create a ResizeObserver to watch for content size changes
             const resizeObserver = new ResizeObserver(entries => {
               const height = document.documentElement.scrollHeight;
@@ -67,6 +74,13 @@ const InjectableIframe = ({
 
           const injectFunction = new Function(resizeScript);
           injectFunction.call(iframe.contentWindow);
+
+          // Create and inject a script element
+          const scriptElement = iframe.contentDocument?.createElement('script');
+          if (scriptElement) {
+            scriptElement.textContent = colorScript;
+            iframe.contentDocument?.head.appendChild(scriptElement);
+          }
         } catch (error) {
           console.error('Error injecting script:', error);
         }
@@ -74,7 +88,9 @@ const InjectableIframe = ({
     };
 
     if (iframeRef.current) {
-      iframeRef.current.onload = injectScript;
+      iframeRef.current.onload = () => {
+        injectScript();
+      };
     }
 
     return () => {
