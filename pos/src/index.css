@@ -76,6 +76,16 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+#root {
+  width: 100vw;
+  min-width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  overflow-x: hidden;
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -115,6 +125,13 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground w-full min-w-full overflow-x-hidden;
+    margin: 0;
+    padding: 0;
+  }
+  html {
+    width: 100%;
+    min-width: 100%;
+    overflow-x: hidden;
   }
 }

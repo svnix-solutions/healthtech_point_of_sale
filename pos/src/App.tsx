@@ -5,6 +5,7 @@ import Login from '@/pages/Login'
 import Dashboard from '@/pages/Dashboard'
 import Appointments from '@/pages/Appointments'
 import Orders from '@/pages/Orders'
+import DiagnosticOrder from '@/pages/DiagnosticOrder'
 import Diagnostics from '@/pages/Diagnostics'
 import { AuthProvider, useAuth } from '@/contexts/AuthContext'
 import { Toaster } from "@/components/ui/sonner"
@@ -39,11 +40,19 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              <Route
+              {/* <Route
                 path="/orders"
                 element={
                   <PrivateRoute>
                     <Orders />
+                  </PrivateRoute>
+                }
+              /> */}
+              <Route
+                path="/diagnostic-order"
+                element={
+                  <PrivateRoute>
+                    <DiagnosticOrder />
                   </PrivateRoute>
                 }
               />
